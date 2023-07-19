@@ -1,62 +1,47 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { get_cleric_spells } from './controllers/spells';
 import { Table, Spinner } from 'react-bootstrap';
 import SpellModal from './components/SpellModal';
+import NavigationBar from './components/NavigationBar';
+import { Route, Routes } from 'react-router-dom';
+import Home from './components/Home';
+import Character from './components/Character';
+import AppContext from './reducer';
 
 function App() {
-	const [spell_list, set_spell_list] = useState([]);
-	const [selected_spell, set_selected_spell] = useState(null);
+	const [store, appDispatch] = useContext(AppContext);
 
 	useEffect(() => {
-		get_cleric_spells().then((res) => set_spell_list(res));
+		//Save and get all spells to local storage to avoid many GET requests
+		const spells = JSON.parse(localStorage.getItem('spell_app_all_spells'));
+		if (!spells) {
+			get_cleric_spells().then((res) => {
+				localStorage.setItem(
+					'spell_app_all_spells',
+					JSON.stringify(res)
+				);
+				appDispatch({ type: 'SPELLS_SET', payload: res });
+			});
+		} else {
+			appDispatch({ type: 'SPELLS_SET', payload: spells });
+		}
 	}, []);
 
-	if (spell_list.length === 0) {
-		return (
-			<Spinner animation='border' role='status'>
-				<span className='visually-hidden'>Loading...</span>
-			</Spinner>
-		);
-	}
-
-	// const SpellModalUtil = (spell) => {
-	// 	const modal_ref = useRef();
-	// 	<SpellModal spell={spell} />;
-	// };
+	// if (spell_list.length === 0) {
+	// 	return (
+	// 		<Spinner animation='border' role='status'>
+	// 			<span className='visually-hidden'>Loading...</span>
+	// 		</Spinner>
+	// 	);
+	// }
 
 	return (
-		<div className='container'>
-			<h1>Hello world!</h1>
-			{selected_spell ? (
-				<SpellModal
-					spell={selected_spell}
-					setSpell={set_selected_spell}
-				/>
-			) : null}
-			<Table striped bordered hover>
-				<thead>
-					<tr>
-						<th>Spell name</th>
-						<th>Level</th>
-					</tr>
-				</thead>
-				<tbody>
-					{spell_list.map((spell) => (
-						<tr key={spell.index}>
-							<td
-								onClick={() => {
-									set_selected_spell(spell);
-								}}
-							>
-								{spell.name}
-							</td>
-							<td>
-								{spell.level === 0 ? 'cantrip' : spell.level}
-							</td>
-						</tr>
-					))}
-				</tbody>
-			</Table>
+		<div>
+			<NavigationBar />
+			<Routes>
+				<Route path='/' element={<Home />} />
+				<Route path='/character' element={<Character />} />
+			</Routes>
 		</div>
 	);
 }

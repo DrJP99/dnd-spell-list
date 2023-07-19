@@ -1,5 +1,6 @@
-import { Modal, Button } from 'react-bootstrap';
+import { Modal, Button, Table } from 'react-bootstrap';
 import { useState } from 'react';
+import Markdown from 'markdown-to-jsx';
 
 const SpellModal = ({ spell, setSpell }) => {
 	const [show, setShow] = useState(true);
@@ -12,26 +13,53 @@ const SpellModal = ({ spell, setSpell }) => {
 	console.log(spell);
 	return (
 		<>
-			<Modal show={show} onHide={handleClose} centered size='lg'>
+			<Modal
+				show={show}
+				onHide={handleClose}
+				centered
+				size='lg'
+				animation={false}
+			>
 				<Modal.Header closeButton>
-					<Modal.Title>{spell.name}</Modal.Title>
+					<div>
+						<Modal.Title>
+							<div>{spell.name}</div>
+						</Modal.Title>
+						<div style={{ fontStyle: 'italic' }}>
+							{spell.level === 0
+								? 'Cantrip'
+								: `Level ${spell.level}`}
+							, {spell.school.name}
+						</div>
+					</div>
 				</Modal.Header>
 				<Modal.Body>
-					<p>
-						<strong>Casting time: </strong>
-						{spell.casting_time}
-					</p>
-					<p>
-						<strong>Somponents: </strong>
-						{spell.components.map((comp) => {
-							return comp;
-						})}
-					</p>
-					{spell.concentration ? (
-						<p>
-							<strong>Concentration</strong>
-						</p>
-					) : null}
+					<Table bordered>
+						<tbody>
+							<tr>
+								<td>
+									Casting time:
+									{spell.casting_time}
+								</td>
+								<td>
+									Range:
+									{spell.range}
+								</td>
+							</tr>
+							<tr>
+								<td>
+									Components:
+									{spell.components.map((comp) => {
+										return comp;
+									})}
+								</td>
+								<td>
+									Duration:
+									{spell.duration}
+								</td>
+							</tr>
+						</tbody>
+					</Table>
 					<p>
 						<strong>Description: </strong>
 						{spell.desc}
