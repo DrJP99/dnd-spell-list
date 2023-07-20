@@ -9,7 +9,7 @@ const Home = () => {
 	return (
 		<Container>
 			<h1>Welcome to my home!</h1>
-			<SpellList spell_list={store.spell_list} />
+			<SpellList spell_list={store.spell_list} add />
 		</Container>
 	);
 };

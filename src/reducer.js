@@ -8,6 +8,7 @@ const initial_state = {
 const appReducer = (state, action) => {
 	let spell_list;
 	let character;
+	let spell;
 	switch (action.type) {
 		//CHARACTERS
 		case 'CHAR_SET':
@@ -25,7 +26,7 @@ const appReducer = (state, action) => {
 			localStorage.removeItem('spell_app_character');
 			return { ...state, character: undefined };
 		case 'CHAR_SPELL_SAVE':
-			const spell = action.payload;
+			spell = action.payload;
 			const spell_level = spell.level;
 
 			character = state.character;
@@ -83,6 +84,31 @@ const appReducer = (state, action) => {
 				JSON.stringify(character)
 			);
 
+			return { ...state, character };
+		case 'CHAR_SPELL_DELETE':
+			spell = action.payload;
+			character = state.character;
+
+			const index = character.spells.spells_per_level[
+				spell.level
+			].prepared.findIndex((s) => s.name === spell.name);
+
+			if (!index) {
+				console.error('Could not find spell in list');
+				return state;
+			}
+
+			character.spells.total_prepared -= 1;
+
+			character.spells.spells_per_level[spell.level].prepared.splice(
+				index,
+				1
+			);
+
+			localStorage.setItem(
+				'spell_app_character',
+				JSON.stringify(character)
+			);
 			return { ...state, character };
 
 		//SPELL LIST

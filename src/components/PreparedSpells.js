@@ -85,7 +85,7 @@ const PreparedSpells = ({
 						</Form.Group>
 					) : null}
 				</Form>
-				<SpellList spell_list={prepared} />
+				<SpellList spell_list={prepared} remove={true} />
 			</Card.Body>
 		</Card>
 	);

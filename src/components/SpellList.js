@@ -2,7 +2,7 @@ import { useState } from 'react';
 import SpellModal from './SpellModal';
 import { Table } from 'react-bootstrap';
 
-const SpellList = ({ spell_list }) => {
+const SpellList = ({ spell_list, add = undefined, remove = undefined }) => {
 	const [selected_spell, set_selected_spell] = useState(null);
 
 	return (
@@ -11,6 +11,8 @@ const SpellList = ({ spell_list }) => {
 				<SpellModal
 					spell={selected_spell}
 					setSpell={set_selected_spell}
+					add={add}
+					remove={remove}
 				/>
 			) : null}
 			<Table striped bordered hover>

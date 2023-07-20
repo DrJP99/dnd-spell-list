@@ -3,7 +3,12 @@ import { useContext, useState } from 'react';
 import Markdown from 'markdown-to-jsx';
 import AppContext from '../reducer';
 
-const SpellModal = ({ spell, setSpell }) => {
+const SpellModal = ({
+	spell,
+	setSpell,
+	add = undefined,
+	remove = undefined,
+}) => {
 	const [show, setShow] = useState(true);
 	const [store, appDispatch] = useContext(AppContext);
 
@@ -12,6 +17,14 @@ const SpellModal = ({ spell, setSpell }) => {
 
 		console.log('saving', spell.name);
 		appDispatch({ type: 'CHAR_SPELL_SAVE', payload: spell });
+		handleClose();
+	};
+
+	const handleRemove = (event) => {
+		event.preventDefault();
+
+		console.log('removing', spell.name);
+		appDispatch({ type: 'CHAR_SPELL_DELETE', payload: spell });
 		handleClose();
 	};
 
@@ -90,9 +103,16 @@ const SpellModal = ({ spell, setSpell }) => {
 					{spell.material ? <p>* - ({spell.material})</p> : null}
 				</Modal.Body>
 				<Modal.Footer>
-					<Button variant='success' onClick={handleSave}>
-						Save spell
-					</Button>
+					{remove ? (
+						<Button variant='danger' onClick={handleRemove}>
+							Remove Spell
+						</Button>
+					) : null}
+					{add ? (
+						<Button variant='success' onClick={handleSave}>
+							Save spell
+						</Button>
+					) : null}
 					<Button variant='secondary' onClick={handleClose}>
 						Close
 					</Button>
