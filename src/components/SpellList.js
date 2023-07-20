@@ -21,20 +21,24 @@ const SpellList = ({ spell_list }) => {
 					</tr>
 				</thead>
 				<tbody>
-					{spell_list.map((spell) => (
-						<tr key={spell.index}>
-							<td
-								onClick={() => {
-									set_selected_spell(spell);
-								}}
-							>
-								{spell.name}
-							</td>
-							<td>
-								{spell.level === 0 ? 'cantrip' : spell.level}
-							</td>
-						</tr>
-					))}
+					{spell_list.length === 0
+						? null
+						: spell_list.map((spell) => (
+								<tr key={spell.index}>
+									<td
+										onClick={() => {
+											set_selected_spell(spell);
+										}}
+									>
+										{spell.name}
+									</td>
+									<td>
+										{spell.level === 0
+											? 'cantrip'
+											: spell.level}
+									</td>
+								</tr>
+						  ))}
 				</tbody>
 			</Table>
 		</div>

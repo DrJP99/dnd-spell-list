@@ -11,6 +11,8 @@ const CharacterPage = ({}) => {
 
 	spells = spells.concat(store.spell_list[0]);
 	spells = spells.concat(store.spell_list[1]);
+
+	console.log(character);
 	return (
 		<Card>
 			<Card.Header>
@@ -61,14 +63,25 @@ const CharacterPage = ({}) => {
 						</Card>
 					</Col>
 				</Row>
+				<p>Max prepared level spells: {character.spells.max_spells}</p>
 				<h5 className='mb-3'>Saved spells:</h5>
 				<Row>
-					<Col className='mb-3'>
-						<PreparedSpells spell_list={spells} />
-					</Col>
-					<Col>
-						<PreparedSpells spell_list={spells} />
-					</Col>
+					{character.spells.spells_per_level.map((spells) => {
+						return (
+							<Col
+								className='mb-3'
+								md={6}
+								key={spells.spell_level}
+							>
+								<PreparedSpells
+									spell_level={spells.spell_level}
+									prepared={spells.prepared}
+									slots={spells.slots}
+									max_cantrips={spells.max_cantrips}
+								/>
+							</Col>
+						);
+					})}
 				</Row>
 			</Card.Body>
 		</Card>

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Button, Card, Col, Form, Row, Stack } from 'react-bootstrap';
 import SpellList from './SpellList';
 
-const PreparedSpells = ({ level = 1, spell_list = [], max = 3, slots = 4 }) => {
+const PreparedSpells = ({ spell_level, prepared, slots, max_cantrips }) => {
 	const [expended, setExpended] = useState([]);
 
 	useEffect(() => {
@@ -33,40 +33,52 @@ const PreparedSpells = ({ level = 1, spell_list = [], max = 3, slots = 4 }) => {
 		height: 30,
 	};
 
-	console.log(spell_list);
+	if (slots === 0 && spell_level > 0) {
+		return null;
+	}
 
 	return (
-		<Card>
+		<Card className='h-100'>
 			<Card.Header>
 				<Stack direction='horizontal'>
-					<Card.Title as='h5'>lvl {level}</Card.Title>
-					<div className='ms-auto'>Spells known: {max}</div>
+					{spell_level === 0 ? (
+						<>
+							<Card.Title as='h5'>Cantrips</Card.Title>
+							<div className='ms-auto'>
+								Cantrips known: {max_cantrips}
+							</div>
+						</>
+					) : (
+						<Card.Title as={'h5'}>lvl {spell_level}</Card.Title>
+					)}
 				</Stack>
 			</Card.Header>
 			<Card.Body>
 				<Form>
-					<Form.Group>
-						<Form.Label>Spell Slots:</Form.Label>
-						<Stack direction='horizontal' gap={1}>
-							{expended.map((slot, i) => {
-								return (
-									<div key={i}>
-										<Form.Check
-											value={i}
-											checked={slot}
-											onChange={(event) =>
-												handleSlot(event)
-											}
-											style={check_box_style}
-										/>
-									</div>
-								);
-							})}
-							<Button className='ms-auto'>reset slots</Button>
-						</Stack>
-					</Form.Group>
+					{spell_level !== 0 ? (
+						<Form.Group>
+							<Form.Label>Spell Slots:</Form.Label>
+							<Stack direction='horizontal' gap={1}>
+								{expended.map((slot, i) => {
+									return (
+										<div key={i}>
+											<Form.Check
+												value={i}
+												checked={slot}
+												onChange={(event) =>
+													handleSlot(event)
+												}
+												style={check_box_style}
+											/>
+										</div>
+									);
+								})}
+								<Button className='ms-auto'>reset slots</Button>
+							</Stack>
+						</Form.Group>
+					) : null}
 				</Form>
-				<SpellList spell_list={spell_list} />
+				<SpellList spell_list={prepared} />
 			</Card.Body>
 		</Card>
 	);

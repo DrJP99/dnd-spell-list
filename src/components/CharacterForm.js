@@ -37,6 +37,95 @@ const CharacterForm = () => {
 		setProficiencyBonus(Math.floor((level - 1) / 4) + 2);
 	};
 
+	const calculateSpells = () => {
+		// Total # = WIS mod + lvl
+		const max_spells = Number(level) + Number(abilityScoreMod);
+		console.log('level', level, '+ score MOD', abilityScoreMod);
+		console.log('max spells:', max_spells);
+		let max_cantrips = 3;
+		let slots = new Array(10).fill(0);
+
+		if (level >= 10) {
+			max_cantrips = 5;
+		} else if (level >= 4) {
+			max_cantrips = 4;
+		} else {
+			max_cantrips = 3;
+		}
+
+		if (level >= 3) {
+			slots[1] = 4;
+		} else if (level === 2) {
+			slots[1] = 3;
+		} else if (level === 1) {
+			slots[1] = 2;
+		}
+
+		if (level >= 4) {
+			slots[2] = 3;
+		} else if (level === 3) {
+			slots[2] = 2;
+		}
+
+		if (level >= 6) {
+			slots[3] = 3;
+		} else if (level === 5) {
+			slots[3] = 2;
+		}
+
+		if (level >= 9) {
+			slots[4] = 3;
+		} else if (level === 8) {
+			slots[4] = 2;
+		} else if (level === 7) {
+			slots[4] = 1;
+		}
+
+		if (level >= 18) {
+			slots[5] = 3;
+		} else if (level >= 10) {
+			slots[5] = 2;
+		} else if (level === 9) {
+			slots[5] = 1;
+		}
+
+		if (level >= 19) {
+			slots[6] = 2;
+		} else if (level >= 11) {
+			slots[6] = 1;
+		}
+
+		if (level === 20) {
+			slots[7] = 2;
+		} else if (level >= 13) {
+			slots[7] = 1;
+		}
+
+		if (level >= 15) {
+			slots[8] = 1;
+		}
+
+		if (level >= 17) {
+			slots[9] = 1;
+		}
+
+		const new_object = {
+			max_spells,
+			total_prepared: 0,
+			spells_per_level: slots.map((slot, i) => {
+				return {
+					max_cantrips: i === 0 ? max_cantrips : undefined,
+					spell_level: i,
+					slots: slot,
+					spent_slots: 0,
+					prepared: [],
+				};
+			}),
+		};
+
+		return new_object;
+	};
+
 	const handleSubmit = (event) => {
 		event.preventDefault();
 
@@ -50,6 +139,7 @@ const CharacterForm = () => {
 			proficiencyBonus,
 			dc: 8 + proficiencyBonus + abilityScoreMod,
 			attackBonus: abilityScoreMod + proficiencyBonus,
+			spells: calculateSpells(),
 		};
 
 		appDispatch({

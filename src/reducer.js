@@ -24,6 +24,35 @@ const appReducer = (state, action) => {
 		case 'CHAR_DELETE':
 			localStorage.removeItem('spell_app_character');
 			return { ...state, character: undefined };
+		case 'CHAR_SPELL_SAVE':
+			const spell = action.payload;
+			const spell_level = spell.level;
+
+			character = state.character;
+
+			if (
+				spell_level > 0 &&
+				character.spells.total_prepared + 1 <=
+					character.spells.max_spells
+			) {
+				character.spells.total_prepared += 1;
+			} else if (spell_level > 0) {
+				console.error('Max number of spells');
+				return state;
+			}
+
+			character.spells.spells_per_level[spell_level].prepared =
+				character.spells.spells_per_level[spell_level].prepared.concat(
+					spell
+				);
+
+			console.log('attempting to save character with spell', character);
+			localStorage.setItem(
+				'spell_app_character',
+				JSON.stringify(character)
+			);
+
+			return { ...state, character };
 
 		//SPELL LIST
 		case 'SPELLS_SET':
