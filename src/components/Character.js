@@ -12,6 +12,18 @@ const CharacterPage = ({}) => {
 	spells = spells.concat(store.spell_list[0]);
 	spells = spells.concat(store.spell_list[1]);
 
+	const handleDelete = (event) => {
+		event.preventDefault();
+
+		if (
+			window.confirm(
+				`Are you sure you want to permanently delete ${character.name}?`
+			)
+		) {
+			appDispatch({ type: 'CHAR_DELETE' });
+		}
+	};
+
 	console.log(character);
 	return (
 		<Card>
@@ -86,6 +98,9 @@ const CharacterPage = ({}) => {
 						);
 					})}
 				</Row>
+				<Button variant='danger' onClick={handleDelete}>
+					Delete Character
+				</Button>
 			</Card.Body>
 		</Card>
 	);
