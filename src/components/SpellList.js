@@ -6,8 +6,7 @@ const SpellList = ({ spell_list }) => {
 	const [selected_spell, set_selected_spell] = useState(null);
 
 	return (
-		<div className='container'>
-			<h1>Hello world!</h1>
+		<div>
 			{selected_spell ? (
 				<SpellModal
 					spell={selected_spell}

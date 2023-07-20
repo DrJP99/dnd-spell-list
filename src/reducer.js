@@ -1,15 +1,21 @@
 import { createContext, useReducer } from 'react';
 
 const initial_state = {
-	character: {},
+	character: undefined,
 	spell_list: [],
 };
 
 const appReducer = (state, action) => {
+	let spell_list;
+	let character;
 	switch (action.type) {
 		//CHARACTERS
+		case 'CHAR_SET':
+			character = action.payload.character;
+			console.log('setting char...:', character);
+			return { ...state, character };
 		case 'CHAR_SAVE':
-			const character = action.payload;
+			character = action.payload.character;
 			localStorage.setItem(
 				'spell_app_character',
 				JSON.stringify(character)
@@ -17,11 +23,14 @@ const appReducer = (state, action) => {
 			return { ...state, character };
 		case 'CHAR_DELETE':
 			localStorage.removeItem('spell_app_character');
-			return { ...state, character: {} };
+			return { ...state, character: undefined };
 
 		//SPELL LIST
 		case 'SPELLS_SET':
-			const spell_list = action.payload;
+			spell_list = action.payload;
+			return { ...state, spell_list };
+		case 'SPELLS_SAVE':
+			spell_list = action.payload;
 			localStorage.setItem(
 				'spell_app_all_spells',
 				JSON.stringify(spell_list)

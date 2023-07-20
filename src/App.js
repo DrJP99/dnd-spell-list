@@ -20,10 +20,20 @@ function App() {
 					'spell_app_all_spells',
 					JSON.stringify(res)
 				);
-				appDispatch({ type: 'SPELLS_SET', payload: res });
+				appDispatch({ type: 'SPELLS_SAVE', payload: res });
 			});
 		} else {
 			appDispatch({ type: 'SPELLS_SET', payload: spells });
+		}
+	}, []);
+
+	useEffect(() => {
+		const character = JSON.parse(
+			localStorage.getItem('spell_app_character')
+		);
+		console.log('TRYING TO SET:', character);
+		if (character) {
+			appDispatch({ type: 'CHAR_SET', payload: { character } });
 		}
 	}, []);
 

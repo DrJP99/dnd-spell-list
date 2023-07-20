@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import {
 	Button,
 	Card,
@@ -8,6 +8,7 @@ import {
 	Row,
 	Stack,
 } from 'react-bootstrap';
+import AppContext from '../reducer';
 
 const CharacterForm = () => {
 	const [name, setName] = useState('');
@@ -17,6 +18,8 @@ const CharacterForm = () => {
 	const [abilityScore, setAbilityScore] = useState(10);
 	const [abilityScoreMod, setAbilityScoreMod] = useState(0);
 	const [proficiencyBonus, setProficiencyBonus] = useState(2);
+
+	const [store, appDispatch] = useContext(AppContext);
 
 	useEffect(() => {
 		calculateAbilityMod();
@@ -45,12 +48,14 @@ const CharacterForm = () => {
 			abilityScore: abilityScore,
 			modifier: abilityScoreMod,
 			proficiencyBonus,
+			dc: 8 + proficiencyBonus + abilityScoreMod,
+			attackBonus: abilityScoreMod + proficiencyBonus,
 		};
 
-		localStorage.setItem(
-			'spell_app_character',
-			JSON.stringify(newCharacter)
-		);
+		appDispatch({
+			type: 'CHAR_SAVE',
+			payload: { character: newCharacter },
+		});
 	};
 
 	return (
