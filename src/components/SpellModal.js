@@ -12,6 +12,7 @@ const SpellModal = ({ spell, setSpell }) => {
 
 		console.log('saving', spell.name);
 		appDispatch({ type: 'CHAR_SPELL_SAVE', payload: spell });
+		handleClose();
 	};
 
 	const handleClose = () => {

@@ -63,8 +63,10 @@ const CharacterPage = ({}) => {
 						</Card>
 					</Col>
 				</Row>
-				<p>Max prepared level spells: {character.spells.max_spells}</p>
-				<h5 className='mb-3'>Saved spells:</h5>
+				<h5 className='mb-3'>
+					Saved spells: ({character.spells.total_prepared}/
+					{character.spells.max_spells})
+				</h5>
 				<Row>
 					{character.spells.spells_per_level.map((spells) => {
 						return (
@@ -78,6 +80,7 @@ const CharacterPage = ({}) => {
 									prepared={spells.prepared}
 									slots={spells.slots}
 									max_cantrips={spells.max_cantrips}
+									prepared_cantrips={spells.prepared_cantrips}
 								/>
 							</Col>
 						);

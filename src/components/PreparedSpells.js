@@ -2,7 +2,13 @@ import { useEffect, useState } from 'react';
 import { Button, Card, Col, Form, Row, Stack } from 'react-bootstrap';
 import SpellList from './SpellList';
 
-const PreparedSpells = ({ spell_level, prepared, slots, max_cantrips }) => {
+const PreparedSpells = ({
+	spell_level,
+	prepared,
+	slots,
+	max_cantrips,
+	prepared_cantrips,
+}) => {
 	const [expended, setExpended] = useState([]);
 
 	useEffect(() => {
@@ -45,7 +51,8 @@ const PreparedSpells = ({ spell_level, prepared, slots, max_cantrips }) => {
 						<>
 							<Card.Title as='h5'>Cantrips</Card.Title>
 							<div className='ms-auto'>
-								Cantrips known: {max_cantrips}
+								Cantrips known: ({prepared_cantrips}/
+								{max_cantrips})
 							</div>
 						</>
 					) : (

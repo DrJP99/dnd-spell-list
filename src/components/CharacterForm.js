@@ -115,6 +115,7 @@ const CharacterForm = () => {
 			spells_per_level: slots.map((slot, i) => {
 				return {
 					max_cantrips: i === 0 ? max_cantrips : undefined,
+					prepared_cantrips: i === 0 ? 0 : undefined,
 					spell_level: i,
 					slots: slot,
 					spent_slots: 0,

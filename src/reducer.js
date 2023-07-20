@@ -32,12 +32,43 @@ const appReducer = (state, action) => {
 
 			if (
 				spell_level > 0 &&
+				character.spells.spells_per_level[spell_level].slots === 0
+			) {
+				console.error(
+					'You must have a spell slot for that level to prepare spell'
+				);
+				return state;
+			}
+
+			if (
+				spell_level > 0 &&
 				character.spells.total_prepared + 1 <=
 					character.spells.max_spells
 			) {
 				character.spells.total_prepared += 1;
 			} else if (spell_level > 0) {
 				console.error('Max number of spells');
+				return state;
+			}
+
+			if (
+				spell_level === 0 &&
+				character.spells.spells_per_level[0].prepared_cantrips + 1 <=
+					character.spells.spells_per_level[0].max_cantrips
+			) {
+				character.spells.spells_per_level[0].prepared_cantrips += 1;
+			} else if (spell_level === 0) {
+				console.error('Max number of cantrips');
+				return state;
+			}
+
+			const saved_spell = character.spells.spells_per_level[
+				spell_level
+			].prepared.find((s) => s.name === spell.name);
+			if (saved_spell) {
+				console.error(
+					`Cannot save spell multiplet times: ${saved_spell.name} is already saved`
+				);
 				return state;
 			}
 
