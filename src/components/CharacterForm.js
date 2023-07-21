@@ -214,7 +214,7 @@ const CharacterForm = () => {
 								</InputGroup>
 							</Form.Group>
 						</Col>
-						<Col>
+						<Col sm xs={12}>
 							<Form.Group className='mb-3'>
 								<Form.Label>Ability Score Modifier</Form.Label>
 								<InputGroup>
