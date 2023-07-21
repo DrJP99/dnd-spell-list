@@ -1,7 +1,5 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import { get_cleric_spells } from './controllers/spells';
-import { Table, Spinner } from 'react-bootstrap';
-import SpellModal from './components/SpellModal';
 import NavigationBar from './components/NavigationBar';
 import { Route, Routes } from 'react-router-dom';
 import Home from './components/Home';

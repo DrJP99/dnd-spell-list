@@ -1,9 +1,48 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import SpellModal from './SpellModal';
 import { Table } from 'react-bootstrap';
+import AppContext from '../reducer';
 
-const SpellList = ({ spell_list, add = undefined, remove = undefined }) => {
+const SpellList = ({ spell_list, add = undefined, remove = undefined, filters }) => {
 	const [selected_spell, set_selected_spell] = useState(null);
+	const [store, appDispatch] = useContext(AppContext);
+
+	console.log(filters)
+	const filtered_spell_list = spell_list.filter((spell) => {
+		if (filters.text) {
+			if (!spell.name.toLowerCase().includes(filters.text.toLowerCase()) && !spell.desc.some((d) => d.toLowerCase().includes(filters.text.toLowerCase())) && !spell.higher_level.some((d) => d.toLowerCase().includes(filters.text.toLowerCase()))) {
+				return false;
+			}
+		}
+		if (filters.level !== 'any') {
+			if (spell.level !== Number(filters.level)) {
+				return false;
+			}
+		}
+		if (filters.time !== 'any') {	
+			if (spell.casting_time !== filters.time) {
+				if (filters.time === 'long') {
+					if (!spell.casting_time.includes('minute') && !spell.casting_time.includes('hour')) {
+						return false;
+					}
+				} else {
+
+					return false;
+				}
+			}
+		}
+		if (filters.concentration !== 'any') {
+			if (spell.concentration !== (filters.concentration === 'yes')) {
+				return false;
+			}
+		}
+		if (filters.classes !== 'any') {
+			if (!spell.classes.some((c) => c.name === filters.classes)) {
+				return false;
+			}
+		}
+		return true;
+	});
 
 	return (
 		<div>
@@ -23,9 +62,9 @@ const SpellList = ({ spell_list, add = undefined, remove = undefined }) => {
 					</tr>
 				</thead>
 				<tbody>
-					{spell_list.length === 0
+					{filtered_spell_list.length === 0
 						? null
-						: spell_list.map((spell) => (
+						: filtered_spell_list.map((spell) => (
 								<tr key={spell.index}>
 									<td
 										onClick={() => {

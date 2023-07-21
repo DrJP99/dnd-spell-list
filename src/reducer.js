@@ -3,6 +3,7 @@ import { createContext, useReducer } from 'react';
 const initial_state = {
 	character: undefined,
 	spell_list: [],
+	filters: undefined
 };
 
 const appReducer = (state, action) => {
@@ -125,6 +126,14 @@ const appReducer = (state, action) => {
 		case 'SPELLS_DELETE':
 			localStorage.removeItem('spell_app_all_spells');
 			return { ...state, spell_list: [] };
+		
+		case 'FILTERS_SET':
+			const filters = action.payload;
+			return {...state, filters}
+
+		//DEFAULT
+		default:
+			return state;
 	}
 };
 
