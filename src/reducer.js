@@ -3,7 +3,8 @@ import { createContext, useReducer } from 'react';
 const initial_state = {
 	character: undefined,
 	spell_list: [],
-	filters: undefined
+	filters: undefined,
+	notifications: []
 };
 
 const saveChar = (character) => {
@@ -19,6 +20,8 @@ const appReducer = (state, action) => {
 	let spell;
 	let expended
 	let spell_level
+	let notification
+	let notifications
 
 	switch (action.type) {
 		//CHARACTERS
@@ -164,9 +167,23 @@ const appReducer = (state, action) => {
 			const filters = action.payload;
 			return {...state, filters}
 
+		//NOTIFICATIONS
+		case 'NOTIF_ADD':
+			notification = action.payload
+			notifications = state.notifications.concat(notification)
+			return {...state, notifications}
+		
+		case 'NOTIF_REMOVE':
+			notifications = state.notifications
+			notifications = notifications.filter((_, i) => i !== 0)
+
+			return {...state, notifications}
+
 		//DEFAULT
 		default:
 			return state;
+		
+		
 	}
 };
 

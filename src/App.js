@@ -5,6 +5,7 @@ import { Route, Routes } from 'react-router-dom';
 import Home from './components/Home';
 import Character from './components/Character';
 import AppContext from './reducer';
+import Notification from './components/Notification';
 
 function App() {
 	const [store, appDispatch] = useContext(AppContext);
@@ -46,6 +47,7 @@ function App() {
 	return (
 		<div>
 			<NavigationBar />
+			<Notification />
 			<Routes>
 				<Route path='/' element={<Home />} />
 				<Route path='/character' element={<Character />} />

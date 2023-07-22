@@ -17,6 +17,13 @@ const SpellModal = ({
 
 		console.log('saving', spell.name);
 		appDispatch({ type: 'CHAR_SPELL_SAVE', payload: spell });
+		appDispatch({type: 'NOTIF_ADD', payload: {
+			type: 'success',
+			message: 'Spell added successfully'
+		}})
+		setTimeout(() => {
+			appDispatch({type: 'NOTIF_REMOVE'})
+		}, 5000);
 		handleClose();
 	};
 
