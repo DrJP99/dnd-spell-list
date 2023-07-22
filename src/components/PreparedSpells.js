@@ -10,6 +10,7 @@ const PreparedSpells = ({
 	spent_slots,
 	max_cantrips,
 	prepared_cantrips,
+	has_available,
 }) => {
 	const [expended, setExpended] = useState([]);
 	const [store, appDispatch] = useContext(AppContext)
@@ -55,6 +56,10 @@ const PreparedSpells = ({
 		return null;
 	}
 
+	const spell_filter = {
+			text: '', level: spell_level, time: 'any', concentration: 'any', classes: 'any'
+		}
+
 	return (
 		<Card className='h-100'>
 			<Card.Header>
@@ -96,7 +101,15 @@ const PreparedSpells = ({
 						</Form.Group>
 					) : null}
 				</Form>
-				<SpellList spell_list={prepared} remove={true} />
+				<SpellList spell_list={prepared} remove={true} filters={spell_filter} />
+				{spell_level === 0 ? 
+					max_cantrips > prepared_cantrips ? 
+						<Button variant='outline-primary' className='w-100'>+ Add Spell</Button>
+					 : null
+					: has_available ?  (
+						<Button variant='outline-primary' className='w-100'>+ Add Spell</Button>
+					) : null
+				}
 			</Card.Body>
 		</Card>
 	);

@@ -96,16 +96,24 @@ const appReducer = (state, action) => {
 			spell = action.payload;
 			character = state.character;
 
+			console.log(spell.level)
+
 			const index = character.spells.spells_per_level[
 				spell.level
-			].prepared.findIndex((s) => s.name === spell.name);
-
-			if (!index) {
+			].prepared.findIndex((s) => {console.log(s.name)
+				return  s.name === spell.name});
+			console.log(index)
+			if (index !== 0 && !index) {
 				console.error('Could not find spell in list');
 				return state;
 			}
 
-			character.spells.total_prepared -= 1;
+			if (spell.level === 0) {
+				character.spells.spells_per_level[0].prepared_cantrips -= 1
+			} else {
+
+				character.spells.total_prepared -= 1;
+			}
 
 			character.spells.spells_per_level[spell.level].prepared.splice(
 				index,

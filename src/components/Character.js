@@ -103,6 +103,7 @@ const CharacterPage = ({}) => {
 									spent_slots={spells.spent_slots}
 									max_cantrips={spells.max_cantrips}
 									prepared_cantrips={spells.prepared_cantrips}
+									has_available={character.spells.max_spells > character.spells.total_prepared}
 								/>
 							</Col>
 						);

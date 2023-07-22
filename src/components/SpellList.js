@@ -3,7 +3,7 @@ import SpellModal from './SpellModal';
 import { Table } from 'react-bootstrap';
 import AppContext from '../reducer';
 
-const SpellList = ({ spell_list, add = undefined, remove = undefined, filters }) => {
+const SpellList = ({ spell_list, add = undefined, remove = undefined, filters = {} }) => {
 	const [selected_spell, set_selected_spell] = useState(null);
 	const [store, appDispatch] = useContext(AppContext);
 
