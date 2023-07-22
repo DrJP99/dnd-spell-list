@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const NavigationBar = () => {
 	return (
-		<Navbar expand='lg' bg='info' sticky='top' className='mb-4'>
+		<Navbar expand='lg' bg='danger' sticky='top' className='mb-4'>
 			<Container>
 				<Navbar.Brand href='/' as={Link} to={'/'}>
 					My Spell List

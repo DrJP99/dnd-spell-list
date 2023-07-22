@@ -1,36 +1,48 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Button, Card, Col, Form, Row, Stack } from 'react-bootstrap';
 import SpellList from './SpellList';
+import AppContext from '../reducer';
 
 const PreparedSpells = ({
 	spell_level,
 	prepared,
 	slots,
+	spent_slots,
 	max_cantrips,
 	prepared_cantrips,
 }) => {
 	const [expended, setExpended] = useState([]);
+	const [store, appDispatch] = useContext(AppContext)
 
 	useEffect(() => {
 		let copy = [];
 		for (let i = 0; i < slots; i++) {
-			copy = copy.concat(false);
+			copy = copy.concat(i < spent_slots);
 		}
 		setExpended(copy);
-	}, []);
+	}, [spent_slots]);
 
-	const resetSlots = () => {
-		setExpended(expended.map(() => false));
-	};
 
 	const handleSlot = (event) => {
 		let slot_index = Number(event.target.value);
 		if (!event.target.checked) {
 			slot_index = slot_index - 1;
 		}
-		setExpended(
-			expended.map((slot, i) => (i <= slot_index ? true : false))
+
+		const ex_list = expended.map((slot, i) => (i <= slot_index ? true : false))
+		setExpended(ex_list
+			
 		);
+
+		const expended_slots = (ex_list.filter(s => s)).length
+
+		appDispatch({
+			type: 'CHAR_SET_SLOTS',
+			payload: {
+				expended: expended_slots,
+				spell_level
+			}
+		})
 	};
 
 	const check_box_style = {
@@ -80,7 +92,6 @@ const PreparedSpells = ({
 										</div>
 									);
 								})}
-								<Button className='ms-auto'>reset slots</Button>
 							</Stack>
 						</Form.Group>
 					) : null}

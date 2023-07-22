@@ -6,10 +6,20 @@ const initial_state = {
 	filters: undefined
 };
 
+const saveChar = (character) => {
+				localStorage.setItem(
+				'spell_app_character',
+				JSON.stringify(character)
+			);
+}
+
 const appReducer = (state, action) => {
 	let spell_list;
 	let character;
 	let spell;
+	let expended
+	let spell_level
+
 	switch (action.type) {
 		//CHARACTERS
 		case 'CHAR_SET':
@@ -18,17 +28,15 @@ const appReducer = (state, action) => {
 			return { ...state, character };
 		case 'CHAR_SAVE':
 			character = action.payload.character;
-			localStorage.setItem(
-				'spell_app_character',
-				JSON.stringify(character)
-			);
+
+			saveChar(character)
 			return { ...state, character };
 		case 'CHAR_DELETE':
 			localStorage.removeItem('spell_app_character');
 			return { ...state, character: undefined };
 		case 'CHAR_SPELL_SAVE':
 			spell = action.payload;
-			const spell_level = spell.level;
+			spell_level = spell.level;
 
 			character = state.character;
 
@@ -80,10 +88,8 @@ const appReducer = (state, action) => {
 				);
 
 			console.log('attempting to save character with spell', character);
-			localStorage.setItem(
-				'spell_app_character',
-				JSON.stringify(character)
-			);
+			
+			saveChar(character)
 
 			return { ...state, character };
 		case 'CHAR_SPELL_DELETE':
@@ -106,11 +112,30 @@ const appReducer = (state, action) => {
 				1
 			);
 
-			localStorage.setItem(
-				'spell_app_character',
-				JSON.stringify(character)
-			);
+			saveChar(character)
 			return { ...state, character };
+
+		case 'CHAR_SET_SLOTS': 
+				character = state.character
+				
+				expended = action.payload.expended
+				spell_level = action.payload.spell_level
+
+
+				character.spells.spells_per_level[spell_level].spent_slots = expended
+				
+				saveChar(character)
+
+				return {...state, character}
+
+		case 'CHAR_RESET_SLOTS':
+			character = state.character
+
+			character.spells.spells_per_level = character.spells.spells_per_level.map(level => (
+				{...level, spent_slots: 0}
+			))
+				saveChar(character)
+			return {...state, character}
 
 		//SPELL LIST
 		case 'SPELLS_SET':

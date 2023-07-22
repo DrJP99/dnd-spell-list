@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import CharacterForm from './CharacterForm';
-import { Button, Card, Col, Container, Row } from 'react-bootstrap';
+import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
 import AppContext from '../reducer';
 import PreparedSpells from './PreparedSpells';
 
@@ -23,6 +23,14 @@ const CharacterPage = ({}) => {
 			appDispatch({ type: 'CHAR_DELETE' });
 		}
 	};
+
+	const longRest = (event) => {
+		event.preventDefault()
+
+		appDispatch({
+			type: 'CHAR_RESET_SLOTS'
+		})
+	}
 
 	console.log(character);
 	return (
@@ -79,6 +87,7 @@ const CharacterPage = ({}) => {
 					Saved spells: ({character.spells.total_prepared}/
 					{character.spells.max_spells})
 				</h5>
+					<Button variant='primary' className='mb-3' onClick={(event) => longRest(event)}>Long rest</Button>
 				<Row>
 					{character.spells.spells_per_level.map((spells) => {
 						return (
@@ -91,6 +100,7 @@ const CharacterPage = ({}) => {
 									spell_level={spells.spell_level}
 									prepared={spells.prepared}
 									slots={spells.slots}
+									spent_slots={spells.spent_slots}
 									max_cantrips={spells.max_cantrips}
 									prepared_cantrips={spells.prepared_cantrips}
 								/>
