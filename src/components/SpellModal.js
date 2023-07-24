@@ -66,7 +66,7 @@ const SpellModal = ({
 		setShowModal(false)
 		// setShowModal(false)
 	}
-	// console.log(spell)
+	console.log(spell)
 
 	if (!spell) {
 		return null

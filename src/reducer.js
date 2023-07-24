@@ -173,6 +173,15 @@ const appReducer = (state, action) => {
 		case "SPELLS_DELETE":
 			localStorage.removeItem("spell_app_all_spells")
 			return { ...state, spell_list: [] }
+		case "SPELLS_ADD_CUSTOM":
+			spell = action.payload
+			spell_list = state.spell_list.concat(spell)
+
+			spell_list.sort((a, b) => a.name.localeCompare(b.name))
+			spell_list.sort((a, b) => a.level - b.level)
+
+			console.log(spell_list)
+			return { ...state, spell_list }
 
 		case "FILTERS_SET":
 			const filters = action.payload
@@ -196,6 +205,7 @@ const appReducer = (state, action) => {
 
 		//DEFAULT
 		default:
+			console.log('could not find action type "' + action.type + '"')
 			return state
 	}
 }
