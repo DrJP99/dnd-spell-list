@@ -1,59 +1,74 @@
-import { useContext, useState } from 'react';
-import SpellModal from './SpellModal';
-import { Table } from 'react-bootstrap';
-import AppContext from '../reducer';
+import { useContext, useState } from "react"
+import SpellModal from "./SpellModal"
+import { Table } from "react-bootstrap"
+import AppContext from "../reducer"
 
-const SpellList = ({ spell_list, add = undefined, remove = undefined, filters = {} }) => {
-	const [selected_spell, set_selected_spell] = useState(null);
-	const [store, appDispatch] = useContext(AppContext);
+const SpellList = ({
+	spell_list,
+	add = undefined,
+	remove = undefined,
+	filters = {},
+}) => {
+	const [selected_spell, set_selected_spell] = useState(null)
+	const [store, appDispatch] = useContext(AppContext)
+	const [showModal, setShowModal] = useState(false)
 
-	console.log(filters)
+	// console.log(filters)
 	const filtered_spell_list = spell_list.filter((spell) => {
 		if (filters.text) {
-			if (!spell.name.toLowerCase().includes(filters.text.toLowerCase()) && !spell.desc.some((d) => d.toLowerCase().includes(filters.text.toLowerCase())) && !spell.higher_level.some((d) => d.toLowerCase().includes(filters.text.toLowerCase()))) {
-				return false;
+			if (
+				!spell.name.toLowerCase().includes(filters.text.toLowerCase()) &&
+				!spell.desc.some((d) =>
+					d.toLowerCase().includes(filters.text.toLowerCase())
+				) &&
+				!spell.higher_level.some((d) =>
+					d.toLowerCase().includes(filters.text.toLowerCase())
+				)
+			) {
+				return false
 			}
 		}
-		if (filters.level !== 'any') {
+		if (filters.level !== "any") {
 			if (spell.level !== Number(filters.level)) {
-				return false;
+				return false
 			}
 		}
-		if (filters.time !== 'any') {	
+		if (filters.time !== "any") {
 			if (spell.casting_time !== filters.time) {
-				if (filters.time === 'long') {
-					if (!spell.casting_time.includes('minute') && !spell.casting_time.includes('hour')) {
-						return false;
+				if (filters.time === "long") {
+					if (
+						!spell.casting_time.includes("minute") &&
+						!spell.casting_time.includes("hour")
+					) {
+						return false
 					}
 				} else {
-
-					return false;
+					return false
 				}
 			}
 		}
-		if (filters.concentration !== 'any') {
-			if (spell.concentration !== (filters.concentration === 'yes')) {
-				return false;
+		if (filters.concentration !== "any") {
+			if (spell.concentration !== (filters.concentration === "yes")) {
+				return false
 			}
 		}
-		if (filters.classes !== 'any') {
+		if (filters.classes !== "any") {
 			if (!spell.classes.some((c) => c.name === filters.classes)) {
-				return false;
+				return false
 			}
 		}
-		return true;
-	});
+		return true
+	})
 
 	return (
 		<div>
-			{selected_spell ? (
-				<SpellModal
-					spell={selected_spell}
-					setSpell={set_selected_spell}
-					add={add}
-					remove={remove}
-				/>
-			) : null}
+			<SpellModal
+				spell={selected_spell}
+				showModal={showModal}
+				setShowModal={setShowModal}
+				add={add}
+				remove={remove}
+			/>
 			<Table striped bordered hover>
 				<thead>
 					<tr>
@@ -68,22 +83,19 @@ const SpellList = ({ spell_list, add = undefined, remove = undefined, filters = 
 								<tr key={spell.index}>
 									<td
 										onClick={() => {
-											set_selected_spell(spell);
+											set_selected_spell(spell)
+											setShowModal(true)
 										}}
 									>
 										{spell.name}
 									</td>
-									<td>
-										{spell.level === 0
-											? 'cantrip'
-											: spell.level}
-									</td>
+									<td>{spell.level === 0 ? "cantrip" : spell.level}</td>
 								</tr>
 						  ))}
 				</tbody>
 			</Table>
 		</div>
-	);
-};
+	)
+}
 
-export default SpellList;
+export default SpellList

@@ -1,40 +1,35 @@
-import { useContext, useEffect } from 'react';
-import { get_cleric_spells } from './controllers/spells';
-import NavigationBar from './components/NavigationBar';
-import { Route, Routes } from 'react-router-dom';
-import Home from './components/Home';
-import Character from './components/Character';
-import AppContext from './reducer';
-import Notification from './components/Notification';
+import { useContext, useEffect } from "react"
+import { get_cleric_spells } from "./controllers/spells"
+import NavigationBar from "./components/NavigationBar"
+import { Route, Routes } from "react-router-dom"
+import Home from "./components/Home"
+import Character from "./components/Character"
+import AppContext from "./reducer"
+import Notifications from "./components/Notification"
 
 function App() {
-	const [store, appDispatch] = useContext(AppContext);
+	const [store, appDispatch] = useContext(AppContext)
 
 	useEffect(() => {
 		//Save and get all spells to local storage to avoid many GET requests
-		const spells = JSON.parse(localStorage.getItem('spell_app_all_spells'));
+		const spells = JSON.parse(localStorage.getItem("spell_app_all_spells"))
 		if (!spells) {
 			get_cleric_spells().then((res) => {
-				localStorage.setItem(
-					'spell_app_all_spells',
-					JSON.stringify(res)
-				);
-				appDispatch({ type: 'SPELLS_SAVE', payload: res });
-			});
+				localStorage.setItem("spell_app_all_spells", JSON.stringify(res))
+				appDispatch({ type: "SPELLS_SAVE", payload: res })
+			})
 		} else {
-			appDispatch({ type: 'SPELLS_SET', payload: spells });
+			appDispatch({ type: "SPELLS_SET", payload: spells })
 		}
-	}, []);
+	}, [])
 
 	useEffect(() => {
-		const character = JSON.parse(
-			localStorage.getItem('spell_app_character')
-		);
-		console.log('TRYING TO SET:', character);
+		const character = JSON.parse(localStorage.getItem("spell_app_character"))
+		console.log("TRYING TO SET:", character)
 		if (character) {
-			appDispatch({ type: 'CHAR_SET', payload: { character } });
+			appDispatch({ type: "CHAR_SET", payload: { character } })
 		}
-	}, []);
+	}, [])
 
 	// if (spell_list.length === 0) {
 	// 	return (
@@ -47,13 +42,13 @@ function App() {
 	return (
 		<div>
 			<NavigationBar />
-			<Notification />
+			<Notifications />
 			<Routes>
-				<Route path='/' element={<Home />} />
-				<Route path='/character' element={<Character />} />
+				<Route path="/" element={<Home />} />
+				<Route path="/character" element={<Character />} />
 			</Routes>
 		</div>
-	);
+	)
 }
 
-export default App;
+export default App
