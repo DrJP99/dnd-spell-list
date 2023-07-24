@@ -14,6 +14,9 @@ function App() {
 	useEffect(() => {
 		//Save and get all spells to local storage to avoid many GET requests
 		const spells = JSON.parse(localStorage.getItem("spell_app_all_spells"))
+		const custom_spells = JSON.parse(
+			localStorage.getItem("spell_app_custom_spells")
+		)
 		if (!spells) {
 			get_cleric_spells().then((res) => {
 				localStorage.setItem("spell_app_all_spells", JSON.stringify(res))
@@ -21,6 +24,12 @@ function App() {
 			})
 		} else {
 			appDispatch({ type: "SPELLS_SET", payload: spells })
+		}
+		if (custom_spells) {
+			appDispatch({
+				type: "SPELLS_SET_CUSTOM",
+				payload: custom_spells,
+			})
 		}
 	}, [])
 

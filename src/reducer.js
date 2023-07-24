@@ -6,14 +6,29 @@ const initial_state = {
 	filters: undefined,
 	notifications: [],
 	error: null,
+	custom_spells: [],
 }
 
 const saveChar = (character) => {
 	localStorage.setItem("spell_app_character", JSON.stringify(character))
 }
 
+const saveCustomSpells = (custom_spells) => {
+	localStorage.setItem("spell_app_custom_spells", JSON.stringify(custom_spells))
+}
+
+const orderSpells = (spell_list) => {
+	let ordered_list = spell_list.sort((a, b) => {
+		return a.name.localeCompare(b.name)
+	})
+	ordered_list = ordered_list.sort((a, b) => a.level - b.level)
+
+	return ordered_list
+}
+
 const appReducer = (state, action) => {
 	let spell_list
+	let custom_spells
 	let character
 	let spell
 	let expended
@@ -173,15 +188,18 @@ const appReducer = (state, action) => {
 		case "SPELLS_DELETE":
 			localStorage.removeItem("spell_app_all_spells")
 			return { ...state, spell_list: [] }
+		case "SPELLS_SET_CUSTOM":
+			custom_spells = action.payload
+			spell_list = orderSpells(state.spell_list.concat(custom_spells))
+			return { ...state, spell_list, custom_spells }
 		case "SPELLS_ADD_CUSTOM":
 			spell = action.payload
 			spell_list = state.spell_list.concat(spell)
+			custom_spells = state.custom_spells.concat(spell)
+			spell_list = orderSpells(spell_list)
 
-			spell_list.sort((a, b) => a.name.localeCompare(b.name))
-			spell_list.sort((a, b) => a.level - b.level)
-
-			console.log(spell_list)
-			return { ...state, spell_list }
+			saveCustomSpells(custom_spells)
+			return { ...state, spell_list, custom_spells }
 
 		case "FILTERS_SET":
 			const filters = action.payload
