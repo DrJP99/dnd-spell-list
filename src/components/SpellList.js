@@ -1,7 +1,8 @@
 import { useContext, useState } from "react"
 import SpellModal from "./SpellModal"
-import { Table } from "react-bootstrap"
+import { Button, Modal, Table } from "react-bootstrap"
 import AppContext from "../reducer"
+import CustomSpellForm from "./CustomSpellForm"
 
 const SpellList = ({
 	spell_list,

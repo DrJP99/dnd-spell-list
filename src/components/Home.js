@@ -12,14 +12,11 @@ const Home = () => {
 
 	return (
 		<Container>
-			<h1>Welcome to my home!</h1>
-			<Card>
-				<Card.Body>
-					<CustomSpellForm />
-				</Card.Body>
-			</Card>
+			<h1>Home</h1>
 			<FilterForm />
+			<CustomSpellForm />
 			<SpellList spell_list={store.spell_list} filters={filters} add />
+			<CustomSpellForm />
 		</Container>
 	)
 }

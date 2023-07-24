@@ -1,5 +1,5 @@
 import { useContext, useState } from "react"
-import { Button, Col, Form, Row } from "react-bootstrap"
+import { Button, Col, Form, Modal, Row } from "react-bootstrap"
 import AppContext from "../reducer"
 
 const CustomSpellForm = () => {
@@ -18,6 +18,8 @@ const CustomSpellForm = () => {
 	const [range, setRange] = useState("")
 	const [ritual, setRitual] = useState(false)
 	const [school, setSchool] = useState("")
+
+	const [show, setShow] = useState(false)
 
 	const [store, appDispatch] = useContext(AppContext)
 
@@ -90,214 +92,230 @@ const CustomSpellForm = () => {
 			type: "SPELLS_ADD_CUSTOM",
 			payload: new_spell,
 		})
+
+		setShow(false)
 	}
 
 	return (
 		<div>
-			<Form onSubmit={handleSubmit}>
-				<Row>
-					<Col sm={9}>
-						<Form.Group className="mb-3">
-							<Form.Label>Name</Form.Label>
-							<Form.Control
-								type="text"
-								value={name}
-								onChange={({ target }) => setName(target.value)}
-							/>
-						</Form.Group>
-					</Col>
-					<Col>
-						<Form.Group className="mb-3">
-							<Form.Label>Level</Form.Label>
-							<Form.Control
-								type="number"
-								value={level}
-								onChange={({ target }) => setLevel(target.value)}
-							/>
-						</Form.Group>
-					</Col>
-				</Row>
-				<Row>
-					<Col sm={6}>
-						<Form.Group className="mb-3">
-							<Form.Label>Casting Time</Form.Label>
-							<Form.Check
-								type="radio"
-								name="castingType"
-								label="Action"
-								value="1 action"
-								defaultChecked
-								onChange={({ target }) => setCastingType(target.value)}
-							/>
-							<Form.Check
-								type="radio"
-								name="castingType"
-								label="Bonus Action"
-								value="1 bonus action"
-								onChange={({ target }) => setCastingType(target.value)}
-							/>
-							<Form.Check
-								type="radio"
-								name="castingType"
-								label="Reaction"
-								value="1 reaction"
-								onChange={({ target }) => setCastingType(target.value)}
-							/>
-						</Form.Group>
-					</Col>
-					<Col sm={6}>
-						<Form.Group className="mb-3">
-							<Form.Label>Classes</Form.Label>
-							{allClasses.map((c) => {
-								return (
-									<Form.Check
-										key={c}
-										type="checkbox"
-										label={c}
-										value={c}
-										onChange={handleChangeClasses}
+			<Button
+				onClick={() => setShow(true)}
+				className="mb-3"
+				variant="outline-primary"
+			>
+				+ Create custom spell
+			</Button>
+			<Modal show={show} onHide={() => setShow(false)} centered size="lg">
+				<Modal.Header closeButton>
+					<Modal.Title>Create a custom spell</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<Form onSubmit={handleSubmit}>
+						<Row>
+							<Col sm={9}>
+								<Form.Group className="mb-3">
+									<Form.Label>Name</Form.Label>
+									<Form.Control
+										type="text"
+										value={name}
+										onChange={({ target }) => setName(target.value)}
 									/>
-								)
-							})}
-						</Form.Group>
-					</Col>
-				</Row>
-				<Row>
-					<Col sm={6}>
-						<Form.Group className="mb-3">
-							<Form.Label>Components</Form.Label>
-							<Form.Check
-								type="checkbox"
-								label="Verbal"
-								value="V"
-								onChange={handleChangeComponents}
-							/>
-							<Form.Check
-								type="checkbox"
-								label="Somatic"
-								value="S"
-								onChange={handleChangeComponents}
-							/>
-							{/* ADD TEXT FOR MATERIAL */}
-							<Form.Check
-								type="checkbox"
-								label="Material"
-								value="M"
-								onChange={handleChangeComponents}
-							/>
-						</Form.Group>
-					</Col>
-					<Col sm={6}>
-						<Form.Label>Concentration</Form.Label>
-						<Form.Group className="mb-3">
-							<Form.Check
-								type="checkbox"
-								label="Concentration"
-								value={concentration}
-								onChange={({ target }) => setConcentration(target.checked)}
-							/>
-						</Form.Group>
-					</Col>
-				</Row>
-				<Row>
-					<Col>
-						<Form.Group className="mb-3">
-							<Form.Label>Description</Form.Label>
-							<Form.Control
-								as="textarea"
-								rows={3}
-								value={description}
-								onChange={({ target }) => setDescription(target.value)}
-							/>
-						</Form.Group>
-					</Col>
-				</Row>
-				<Row>
-					<Col>
-						<Form.Group className="mb-3">
-							<Form.Label>Higher Level</Form.Label>
-							<Form.Control
-								as="textarea"
-								rows={3}
-								value={higherLevel}
-								onChange={({ target }) => setHigherLevel(target.value)}
-							/>
-						</Form.Group>
-					</Col>
-				</Row>
-				<Row>
-					<Col sm={6}>
-						<Form.Group className="mb-3">
-							<Form.Label>Duration</Form.Label>
-							<Form.Check
-								type="radio"
-								name="durationCheck"
-								label="Instantaneous"
-								value="Instantaneous"
-								defaultChecked
-								onChange={({ target }) => setDuration(target.value)}
-							/>
-							{/* ADD TEXT FOR DURATION */}
-						</Form.Group>
-					</Col>
-					<Col sm={6}>
-						<Form.Group className="mb-3">
-							<Form.Label>Ritual</Form.Label>
-							<Form.Check
-								type="checkbox"
-								label="Ritual"
-								value={ritual}
-								onChange={({ target }) => setRitual(target.checked)}
-							/>
-						</Form.Group>
-					</Col>
-				</Row>
-				<Row>
-					<Col sm={6}>
-						<Form.Group className="mb-3">
-							<Form.Label>School</Form.Label>
-							<Form.Select
-								aria-label="Default select"
-								value={school}
-								defaultValue={allSchools[0]}
-								onChange={({ target }) => setSchool(target.value)}
-							>
-								{allSchools.map((s) => {
-									return (
-										<option key={s} value={s}>
-											{s}
-										</option>
-									)
-								})}
-							</Form.Select>
-						</Form.Group>
-					</Col>
-					<Col>
-						<Form.Group className="mb-3">
-							<Form.Label>Range</Form.Label>
-							<Form.Check
-								type="radio"
-								name="rangeCheck"
-								label="Self"
-								value="Self"
-								defaultChecked
-								onChange={({ target }) => setRange(target.value)}
-							/>
-							<Form.Check
-								type="radio"
-								name="rangeCheck"
-								label="Touch"
-								value="Touch"
-								onChange={({ target }) => setRange(target.value)}
-							/>
-							{/* ADD TEXT FOR LONGER RANGE */}
-						</Form.Group>
-					</Col>
-				</Row>
-				<Button variant="primary" type="submit">
-					Save
-				</Button>
-			</Form>
+								</Form.Group>
+							</Col>
+							<Col>
+								<Form.Group className="mb-3">
+									<Form.Label>Level</Form.Label>
+									<Form.Control
+										type="number"
+										value={level}
+										onChange={({ target }) => setLevel(target.value)}
+									/>
+								</Form.Group>
+							</Col>
+						</Row>
+						<Row>
+							<Col sm={6}>
+								<Form.Group className="mb-3">
+									<Form.Label>Casting Time</Form.Label>
+									<Form.Check
+										type="radio"
+										name="castingType"
+										label="Action"
+										value="1 action"
+										defaultChecked
+										onChange={({ target }) => setCastingType(target.value)}
+									/>
+									<Form.Check
+										type="radio"
+										name="castingType"
+										label="Bonus Action"
+										value="1 bonus action"
+										onChange={({ target }) => setCastingType(target.value)}
+									/>
+									<Form.Check
+										type="radio"
+										name="castingType"
+										label="Reaction"
+										value="1 reaction"
+										onChange={({ target }) => setCastingType(target.value)}
+									/>
+								</Form.Group>
+							</Col>
+							<Col sm={6}>
+								<Form.Group className="mb-3">
+									<Form.Label>Classes</Form.Label>
+									{allClasses.map((c) => {
+										return (
+											<Form.Check
+												key={c}
+												type="checkbox"
+												label={c}
+												value={c}
+												onChange={handleChangeClasses}
+											/>
+										)
+									})}
+								</Form.Group>
+							</Col>
+						</Row>
+						<Row>
+							<Col sm={6}>
+								<Form.Group className="mb-3">
+									<Form.Label>Components</Form.Label>
+									<Form.Check
+										type="checkbox"
+										label="Verbal"
+										value="V"
+										onChange={handleChangeComponents}
+									/>
+									<Form.Check
+										type="checkbox"
+										label="Somatic"
+										value="S"
+										onChange={handleChangeComponents}
+									/>
+									{/* ADD TEXT FOR MATERIAL */}
+									<Form.Check
+										type="checkbox"
+										label="Material"
+										value="M"
+										onChange={handleChangeComponents}
+									/>
+								</Form.Group>
+							</Col>
+							<Col sm={6}>
+								<Form.Label>Concentration</Form.Label>
+								<Form.Group className="mb-3">
+									<Form.Check
+										type="checkbox"
+										label="Concentration"
+										value={concentration}
+										onChange={({ target }) => setConcentration(target.checked)}
+									/>
+								</Form.Group>
+							</Col>
+						</Row>
+						<Row>
+							<Col>
+								<Form.Group className="mb-3">
+									<Form.Label>Description</Form.Label>
+									<Form.Control
+										as="textarea"
+										rows={3}
+										value={description}
+										onChange={({ target }) => setDescription(target.value)}
+									/>
+								</Form.Group>
+							</Col>
+						</Row>
+						<Row>
+							<Col>
+								<Form.Group className="mb-3">
+									<Form.Label>Higher Level</Form.Label>
+									<Form.Control
+										as="textarea"
+										rows={3}
+										value={higherLevel}
+										onChange={({ target }) => setHigherLevel(target.value)}
+									/>
+								</Form.Group>
+							</Col>
+						</Row>
+						<Row>
+							<Col sm={6}>
+								<Form.Group className="mb-3">
+									<Form.Label>Duration</Form.Label>
+									<Form.Check
+										type="radio"
+										name="durationCheck"
+										label="Instantaneous"
+										value="Instantaneous"
+										defaultChecked
+										onChange={({ target }) => setDuration(target.value)}
+									/>
+									{/* ADD TEXT FOR DURATION */}
+								</Form.Group>
+							</Col>
+							<Col sm={6}>
+								<Form.Group className="mb-3">
+									<Form.Label>Ritual</Form.Label>
+									<Form.Check
+										type="checkbox"
+										label="Ritual"
+										value={ritual}
+										onChange={({ target }) => setRitual(target.checked)}
+									/>
+								</Form.Group>
+							</Col>
+						</Row>
+						<Row>
+							<Col sm={6}>
+								<Form.Group className="mb-3">
+									<Form.Label>School</Form.Label>
+									<Form.Select
+										aria-label="Default select"
+										value={school}
+										defaultValue={allSchools[0]}
+										onChange={({ target }) => setSchool(target.value)}
+									>
+										{allSchools.map((s) => {
+											return (
+												<option key={s} value={s}>
+													{s}
+												</option>
+											)
+										})}
+									</Form.Select>
+								</Form.Group>
+							</Col>
+							<Col>
+								<Form.Group className="mb-3">
+									<Form.Label>Range</Form.Label>
+									<Form.Check
+										type="radio"
+										name="rangeCheck"
+										label="Self"
+										value="Self"
+										defaultChecked
+										onChange={({ target }) => setRange(target.value)}
+									/>
+									<Form.Check
+										type="radio"
+										name="rangeCheck"
+										label="Touch"
+										value="Touch"
+										onChange={({ target }) => setRange(target.value)}
+									/>
+									{/* ADD TEXT FOR LONGER RANGE */}
+								</Form.Group>
+							</Col>
+						</Row>
+						<Button variant="primary" type="submit">
+							Save
+						</Button>
+					</Form>
+				</Modal.Body>
+			</Modal>
 		</div>
 	)
 }
