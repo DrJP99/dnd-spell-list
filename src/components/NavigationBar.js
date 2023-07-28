@@ -28,13 +28,8 @@ const NavigationBar = () => {
 						>
 							character
 						</Nav.Link>
-						<Nav.Link
-							href="/profile"
-							as={Link}
-							to="/profile"
-							eventKey={"/profile"}
-						>
-							profile
+						<Nav.Link href="/about" as={Link} to="/about" eventKey={"/about"}>
+							about
 						</Nav.Link>
 					</Nav>
 				</Navbar.Collapse>

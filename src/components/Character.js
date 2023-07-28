@@ -101,14 +101,16 @@ const CharacterPage = ({}) => {
 		<Card>
 			<Card.Header>
 				<Card.Title as={"h2"}>{character.name}</Card.Title>
-				<h3>Level {character.level}</h3>
+				<h5 className="fst-italic">Level {character.level}</h5>
 			</Card.Header>
 			<Card.Body>
 				<Row>
 					<Col className="mb-3">
 						<Card className="text-center h-100">
 							<Card.Header className="text-muted">spell class</Card.Header>
-							<Card.Body>{character.class}</Card.Body>
+							<Card.Body className="text-capitalize">
+								{character.class}
+							</Card.Body>
 						</Card>
 					</Col>
 					<Col className="mb-3">

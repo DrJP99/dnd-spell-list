@@ -7,6 +7,7 @@ import Character from "./components/Character"
 import AppContext from "./reducer"
 import Notifications from "./components/Notification"
 import Footer from "./components/Footer"
+import About from "./components/About"
 
 function App() {
 	const [store, appDispatch] = useContext(AppContext)
@@ -56,6 +57,8 @@ function App() {
 			<Routes>
 				<Route path="/" element={<Home />} />
 				<Route path="/character" element={<Character />} />
+				<Route path="/about" element={<About />} />
+				<Route path="*" element={<h1>Not Found</h1>} />
 			</Routes>
 			<Footer />
 		</div>
