@@ -17,6 +17,10 @@ const saveCustomSpells = (custom_spells) => {
 	localStorage.setItem("spell_app_custom_spells", JSON.stringify(custom_spells))
 }
 
+const removeSpell = (spell, spell_list) => {
+	return spell_list.filter((s) => s.index !== spell.index)
+}
+
 const orderSpells = (spell_list) => {
 	let ordered_list = spell_list.sort((a, b) => {
 		return a.name.localeCompare(b.name)
@@ -194,11 +198,19 @@ const appReducer = (state, action) => {
 			return { ...state, spell_list, custom_spells }
 		case "SPELLS_ADD_CUSTOM":
 			spell = action.payload
+			//TODO:  Check IF SPELL IS UNIQUE
 			spell_list = state.spell_list.concat(spell)
 			custom_spells = state.custom_spells.concat(spell)
 			spell_list = orderSpells(spell_list)
 
 			saveCustomSpells(custom_spells)
+			return { ...state, spell_list, custom_spells }
+		case "SPELLS_DELETE_CUSTOM":
+			spell = action.payload
+			spell_list = removeSpell(spell, state.spell_list)
+			custom_spells = removeSpell(spell, state.custom_spells)
+			saveCustomSpells(custom_spells)
+
 			return { ...state, spell_list, custom_spells }
 
 		case "FILTERS_SET":

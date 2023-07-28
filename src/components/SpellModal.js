@@ -1,4 +1,4 @@
-import { Modal, Button, Table } from "react-bootstrap"
+import { Modal, Button, Table, Alert } from "react-bootstrap"
 import { useCallback, useContext, useEffect, useState } from "react"
 import Markdown from "markdown-to-jsx"
 import AppContext from "../reducer"
@@ -60,6 +60,23 @@ const SpellModal = ({
 			message: `Removed ${spell.name} from prepared spells`,
 			header: "Success!",
 		})
+	}
+
+	const handleDelete = (event) => {
+		event.preventDefault()
+
+		appDispatch({
+			type: "SPELLS_DELETE_CUSTOM",
+			payload: spell,
+		})
+
+		setNotification({
+			type: "success",
+			message: `Deleted the custom spell ${spell.name}.`,
+			header: "Custom spell removed!",
+		})
+
+		handleClose()
 	}
 
 	const handleClose = () => {
@@ -134,8 +151,16 @@ const SpellModal = ({
 						</p>
 					) : null}
 					{spell.material ? <p>* - ({spell.material})</p> : null}
+					{spell.custom ? (
+						<Alert variant="info">This is a custom spell.</Alert>
+					) : null}
 				</Modal.Body>
 				<Modal.Footer>
+					{spell.custom ? (
+						<Button variant="outline-warning" onClick={handleDelete}>
+							Delete custom spell
+						</Button>
+					) : null}
 					{remove ? (
 						<Button variant="danger" onClick={handleRemove}>
 							Remove Spell
